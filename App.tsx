@@ -11,6 +11,7 @@ import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import store from '@/config/dva';
 
 import {Provider} from 'react-redux';
+import Navigator from '@/navigator/index';
 
 function App(): JSX.Element {
   return (
@@ -22,6 +23,7 @@ function App(): JSX.Element {
           barStyle="dark-content"
           translucent
         />
+        <Navigator />
       </SafeAreaView>
     </Provider>
   );
