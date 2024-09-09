@@ -1,6 +1,9 @@
 import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Home from '@/pages/Home';
+import {RootState} from '@/models/index';
+import {connect, ConnectedProps} from 'react-redux';
+import Found from '@/pages/Found';
 
 export type HomeParamList = {
   [Key: string]: {
@@ -9,14 +12,27 @@ export type HomeParamList = {
 };
 const Tab = createMaterialTopTabNavigator<HomeParamList>();
 
-export interface HomeTabsProps {
+const mapStateToProps = (state: RootState) => {
+  const {home, category} = state;
+  // console.log(category);
+  return {
+    gradientVisible: home.gradientVisible,
+    // myCategories: category.myCategories,
+  };
+};
+
+const connector = connect(mapStateToProps);
+
+type ModelState = ConnectedProps<typeof connector>;
+
+export interface HomeTabsProps extends ModelState {
   name: string;
 }
 const HomeTabs: React.FC<HomeTabsProps> = props => {
   return (
     <Tab.Screen
       name="Home"
-      component={Home}
+      component={Found}
       options={{
         tabBarLabel: 'Home',
       }}
@@ -24,4 +40,4 @@ const HomeTabs: React.FC<HomeTabsProps> = props => {
   );
 };
 
-export default HomeTabs;
+export default connector(HomeTabs);

@@ -422,6 +422,8 @@ PODS:
     - React-jsi (= 0.71.18)
     - React-logger (= 0.71.18)
     - React-perflogger (= 0.71.18)
+  - RNCAsyncStorage (2.0.0):
+    - React-Core
   - RNGestureHandler (2.19.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -498,6 +500,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -594,6 +597,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNScreens:
@@ -653,6 +658,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: e14a0c49feb892af58079cdce3c0e00845a9752b
   React-runtimeexecutor: 42879042777099d3a2a7985b240f1da24300a773
   ReactCommon: 6b451ad57a7859920ee0ec84163d3c42d933abd6
+  RNCAsyncStorage: d35c79ffba52c1013013e16b1fc295aec2feabb6
   RNGestureHandler: 7ad14a6c7b491add489246611d324f10009083ac
   RNScreens: 80369e822c4f123c3f076c9ea4141991c17770f9
   RNSVG: 5da7a24f31968ec74f0b091e3440080f347e279b
