@@ -1,8 +1,14 @@
-import React, {FunctionComponent} from 'react';
+import React, {FunctionComponent, useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {RouteProp, TabNavigationState} from '@react-navigation/native';
 import {RootStackNavigation, RootStackParamList} from './index';
 import HomeTabs, {HomeTabsProps} from './HomeTabs';
+import Icon from '@/components/iconfont/Icon';
+import Listen from '@/pages/Listen';
+import {Text} from 'react-native';
+import Found from '@/pages/Found';
+import Account from '@/pages/Account';
+import {navigationRef} from '@/utils/index';
 
 export type BottomTabParamList = {
   HomeTabs: any;
@@ -38,12 +44,71 @@ function getHeaderTitle(routeName: string) {
 }
 
 const BottomTabs: React.FC<IProps> = props => {
+  //动态设置头部标题
+  function setHeaderTitle() {
+    const {navigation} = props;
+    const routeName = navigationRef.current?.getCurrentRoute()?.name ?? '';
+    if (routeName === 'Home') {
+      navigation.setOptions({
+        headerTransparent: true,
+        headerTitle: '',
+        headerShown: false,
+      });
+    } else {
+      const title = getHeaderTitle(routeName);
+      navigation.setOptions({
+        headerTitle: title,
+      });
+    }
+  }
+
+  //首次挂载和更新都能触发
+  useEffect(() => {
+    setHeaderTitle();
+  });
   return (
     <Tab.Navigator>
       <Tab.Screen
         name="HomeTabs"
         //@ts-ignore
         component={HomeTabs}
+        options={{
+          tabBarLabel: '首页',
+          headerShown: false,
+          tabBarIcon: ({color, size}) => (
+            <Icon name="shouye" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Listen"
+        component={Listen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({color, size}) => (
+            <Icon name="shoucang" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Found"
+        component={Found}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({color, size}) => (
+            <Icon name="faxian" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Account"
+        component={Account}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({color, size}) => (
+            <Icon name="user" color={color} size={size} />
+          ),
+        }}
       />
     </Tab.Navigator>
   );
