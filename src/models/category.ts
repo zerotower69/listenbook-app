@@ -104,7 +104,7 @@ const categoryModel: CategoryModel = {
   },
   subscriptions: {
     setup({dispatch}) {
-      dispatch({type: 'loadData'});
+      // dispatch({type: 'loadData'});
     },
     asyncStorage() {
       // storage.sync.categories = async () => {

@@ -422,6 +422,8 @@ PODS:
     - React-jsi (= 0.71.18)
     - React-logger (= 0.71.18)
     - React-perflogger (= 0.71.18)
+  - ReactNativeExceptionHandler (2.10.10):
+    - React-Core
   - RNCAsyncStorage (2.0.0):
     - React-Core
   - RNGestureHandler (2.19.0):
@@ -431,8 +433,8 @@ PODS:
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-RCTImage
-  - RNSVG (15.6.0):
-    - React-Core
+  - RNSVG (9.13.0):
+    - React
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -500,6 +502,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeExceptionHandler (from `../node_modules/react-native-exception-handler/ReactNativeExceptionHandler.podspec`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -597,6 +600,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeExceptionHandler:
+    :podspec: "../node_modules/react-native-exception-handler/ReactNativeExceptionHandler.podspec"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNGestureHandler:
@@ -658,14 +663,15 @@ SPEC CHECKSUMS:
   React-RCTVibration: e14a0c49feb892af58079cdce3c0e00845a9752b
   React-runtimeexecutor: 42879042777099d3a2a7985b240f1da24300a773
   ReactCommon: 6b451ad57a7859920ee0ec84163d3c42d933abd6
+  ReactNativeExceptionHandler: b11ff67c78802b2f62eed0e10e75cb1ef7947c60
   RNCAsyncStorage: d35c79ffba52c1013013e16b1fc295aec2feabb6
   RNGestureHandler: 7ad14a6c7b491add489246611d324f10009083ac
   RNScreens: 80369e822c4f123c3f076c9ea4141991c17770f9
-  RNSVG: 5da7a24f31968ec74f0b091e3440080f347e279b
+  RNSVG: 02afa5e73ab68c706208d0c64d25da80c6c75d0b
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: e407d2e8cc6cf5170a1dddf459f9fc612f85fcac
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: db42b7f245c8f60d179a4ca3376cb4019f08738b
+PODFILE CHECKSUM: 8ff961bfdfcde1b9d55aaf60783f00a48e002ea6
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2
