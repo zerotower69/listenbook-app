@@ -144,22 +144,22 @@ const Home: React.FC<IProps> = props => {
   }, []);
 
   return (
-    // <FlatList
-    //   data={channels}
-    //   renderItem={renderItem}
-    //   keyExtractor={item => item.id}
-    //   ListHeaderComponent={renderHeader}
-    //   ListFooterComponent={renderFooter}
-    //   ListEmptyComponent={renderEmpty}
-    //   refreshing={refreshing}
-    //   onRefresh={onRefresh}
-    //   onEndReached={onEndReached}
-    //   onEndReachedThreshold={0.2}
-    //   onScroll={onScroll}
-    // />
-    <View>
-      <Text>Ho9mekjhhhh</Text>
-    </View>
+    <FlatList
+      data={channels}
+      renderItem={renderItem}
+      keyExtractor={item => item.id}
+      ListHeaderComponent={renderHeader}
+      ListFooterComponent={renderFooter}
+      ListEmptyComponent={renderEmpty}
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+      onEndReached={onEndReached}
+      onEndReachedThreshold={0.2}
+      onScroll={onScroll}
+    />
+    // <View>
+    //   <Text>Ho9mekjhhhh</Text>
+    // </View>
   );
 };
 

@@ -3072,7 +3072,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.14.150":
+"@types/lodash@npm:^4.17.7":
   version: 4.17.7
   resolution: "@types/lodash@npm:4.17.7"
   checksum: 09e58a119cd8a70acfb33f8623dc2fc54f74cdce3b3429b879fc2daac4807fe376190a04b9e024dd300f9a3ee1876d6623979cefe619f70654ca0fe0c47679a7
@@ -6503,7 +6503,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"invariant@npm:^2.2.1, invariant@npm:^2.2.4":
+"invariant@npm:>=2, invariant@npm:^2.2.1, invariant@npm:^2.2.4":
   version: 2.2.4
   resolution: "invariant@npm:2.2.4"
   dependencies:
@@ -7754,7 +7754,7 @@ __metadata:
     "@tsconfig/react-native": ^2.0.2
     "@types/css-tree": ^2.3.8
     "@types/jest": ^29.2.1
-    "@types/lodash": ^4.14.150
+    "@types/lodash": ^4.17.7
     "@types/react": ^18.0.24
     "@types/react-native-snap-carousel": ^3.8.11
     "@types/react-redux": ^7.1.7
@@ -7771,6 +7771,7 @@ __metadata:
     dva-model-extend: ^0.1.2
     eslint: ^8.19.0
     jest: ^29.2.1
+    lodash: ^4.17.21
     metro-react-native-babel-preset: 0.73.10
     prettier: ^2.4.1
     react: 18.2.0
@@ -7789,6 +7790,7 @@ __metadata:
     react-native-svg: 9.13.0
     react-native-tab-view: ^3.5.2
     react-native-tab-view-viewpager-adapter: ^1.1.0
+    react-navigation-header-buttons: ^10.0.0
     react-redux: ^9.1.2
     react-test-renderer: 18.2.0
     typescript: 4.8.4
@@ -10034,6 +10036,18 @@ __metadata:
   bin:
     react-native: cli.js
   checksum: c6d50f253d687fd62cce36d3165873a2046e1a7bab7eb75970466f71cb9225b2cc05f9ea5c2069514d05ef752d13deeb48bb8673e94e0a8ad99ceb472a9b4eb8
+  languageName: node
+  linkType: hard
+
+"react-navigation-header-buttons@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "react-navigation-header-buttons@npm:10.0.0"
+  dependencies:
+    invariant: ">=2"
+  peerDependencies:
+    "@react-navigation/native": ">=5"
+    react-native: ">=0.65.0"
+  checksum: 3853cc72a37fc646cd86f489b4c81ccd4e58cde02998369914ffa6c55285815b4cec4a19a6eec82796064795f77d1067d9c8fe5c0975b1367263bdc42d4ea04b
   languageName: node
   linkType: hard
 

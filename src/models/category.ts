@@ -1,7 +1,7 @@
 import {Effect, Model, SubscriptionsMapObject} from 'dva-core-ts';
 import {Reducer} from 'redux';
 import storage, {load} from '@/config/storage';
-import axios from 'axios';
+import http from '@/config/http';
 import {RootState} from '@/models/index';
 
 const CATEGORY_URL = '/category';
@@ -104,17 +104,17 @@ const categoryModel: CategoryModel = {
   },
   subscriptions: {
     setup({dispatch}) {
-      // dispatch({type: 'loadData'});
+      dispatch({type: 'loadData'});
     },
     asyncStorage() {
-      // storage.sync.categories = async () => {
-      //   const data = await axios.get(CATEGORY_URL);
-      //   // {status:100,data:{}}
-      //   return data.data;
-      // };
-      // storage.sync.myCategories = async () => {
-      //   return null;
-      // };
+      storage.sync.categories = async () => {
+        const data = await http.get(CATEGORY_URL);
+        // {status:100,data:{}}
+        return data.data;
+      };
+      storage.sync.myCategories = async () => {
+        return null;
+      };
     },
   },
 };

@@ -5,7 +5,6 @@ import {RootStackNavigation, RootStackParamList} from './index';
 import HomeTabs, {HomeTabsProps} from './HomeTabs';
 import Icon from '@/components/iconfont/Icon';
 import Listen from '@/pages/Listen';
-import {Text} from 'react-native';
 import Found from '@/pages/Found';
 import Account from '@/pages/Account';
 import {navigationRef} from '@/utils/index';

@@ -14,6 +14,7 @@ import {
 import {Platform, StatusBar, StyleSheet} from 'react-native';
 import {navigationRef} from '@/utils/index';
 import BottomTabs from './BottomTabs';
+import Category from '@/pages/Category';
 
 export type RootStackParamList = {
   BottomTabs: {
@@ -38,6 +39,13 @@ const Navigator: React.FC = () => {
           component={BottomTabs}
           options={{
             headerTitle: '首页',
+          }}
+        />
+        <Stack.Screen
+          name="Category"
+          component={Category}
+          options={{
+            headerTitle: '分类',
           }}
         />
       </Stack.Navigator>

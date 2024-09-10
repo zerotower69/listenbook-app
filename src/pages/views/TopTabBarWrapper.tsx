@@ -10,6 +10,11 @@ import {
 import {getActionRouteName} from '@/utils/index';
 import {connect, ConnectedProps} from 'react-redux';
 import Touchable from '@/components/Touchable';
+import {Dimensions, StatusBar} from 'react-native';
+
+const {height: SCREEN_HEIGHT, width: SCREEN_WIDTH} = Dimensions.get('window');
+
+const STATUSBAR_HEIGHT = StatusBar.currentHeight;
 
 const mapStateToProps = (state: RootState, props: MaterialTopTabBarProps) => {
   const routeName = getActionRouteName(props.state);
@@ -45,7 +50,7 @@ const TopTabBarWrapper: React.FC<IProps> = props => {
     const {navigation} = props;
     navigation.navigate('Category');
   }
-  const {gradientVisible, ...restProps} = props;
+  const {gradientVisible = false, ...restProps} = props;
   let textStyle = styles.whiteText;
   if (gradientVisible) {
     textStyle = styles.whiteText;
@@ -74,7 +79,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       android: {
         //ios设置了会导致头部空白过多
-        // paddingTop: getStatusBarHeight(),
+        paddingTop: STATUSBAR_HEIGHT,
       },
     }),
   },

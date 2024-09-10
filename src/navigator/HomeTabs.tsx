@@ -65,7 +65,7 @@ const HomeTabs: React.FC<HomeTabsProps> = props => {
         name="Home"
         component={Home}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: '推荐',
         }}
       />
     </Tab.Navigator>

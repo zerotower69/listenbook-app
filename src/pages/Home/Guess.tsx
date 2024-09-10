@@ -21,12 +21,12 @@ interface IProps extends ModelState {
 }
 
 const Guess: React.FC<IProps> = props => {
-  const {dispatch, namespace} = props;
+  const {dispatch, namespace, guess} = props;
   //获取数据
   function fetchData() {
-    // dispatch({
-    //   type: 'home/fetchGuess',
-    // });
+    dispatch({
+      type: 'home/fetchGuess',
+    });
   }
 
   function renderItem({item}: {item: IGuess}) {
@@ -41,7 +41,6 @@ const Guess: React.FC<IProps> = props => {
   useEffect(() => {
     fetchData();
   }, []);
-  const {guess} = props;
   return (
     <View style={styles.container}>
       <View style={styles.header}>
