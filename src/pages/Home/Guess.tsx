@@ -5,10 +5,19 @@ import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
 import Icon from '@/components/iconfont/Icon';
 import {IGuess} from '@/models/home';
 import Touchable from '@/components/Touchable';
+import {RouteProp} from '@react-navigation/native';
+import {HomeParamList} from '@/navigator/HomeTabs';
+import {navigationRef} from '@/utils/index';
 
-const mapStateToProps = ({home}: RootState) => {
+const mapStateToProps = (state: RootState) => {
+  const route = navigationRef.current?.getCurrentRoute()?.params ?? {
+    namespace: 'home',
+  };
+  // @ts-ignore
+  const {namespace = 'home'} = route;
+  const homeState = state[namespace];
   return {
-    guess: home.guess,
+    guess: homeState.guess,
   };
 };
 
@@ -25,7 +34,7 @@ const Guess: React.FC<IProps> = props => {
   //获取数据
   function fetchData() {
     dispatch({
-      type: 'home/fetchGuess',
+      type: namespace + '/fetchGuess',
     });
   }
 

@@ -12,20 +12,23 @@ import {connect, ConnectedProps} from 'react-redux';
 import Touchable from '@/components/Touchable';
 import {Dimensions, StatusBar} from 'react-native';
 
-const {height: SCREEN_HEIGHT, width: SCREEN_WIDTH} = Dimensions.get('window');
+// const {height: SCREEN_HEIGHT, width: SCREEN_WIDTH} = Dimensions.get('window');
 
 const STATUSBAR_HEIGHT = StatusBar.currentHeight;
 
 const mapStateToProps = (state: RootState, props: MaterialTopTabBarProps) => {
   const routeName = getActionRouteName(props.state);
   const modelState = state[routeName];
+  console.log(
+    modelState.carousels[modelState.activeCarouselIndex]?.colors ?? [],
+  );
   return {
-    // activeIndex: modelState.activeCarouselIndex,
-    // linearColors: modelState.carousels
-    //   ? modelState.carousels[modelState.activeCarouselIndex]?.colors ??
-    //     undefined
-    //   : undefined,
-    // gradientVisible: modelState.gradientVisible,
+    activeIndex: modelState.activeCarouselIndex,
+    linearColors: modelState.carousels
+      ? modelState.carousels[modelState.activeCarouselIndex]?.colors ??
+        undefined
+      : undefined,
+    gradientVisible: modelState.gradientVisible,
   };
 };
 
@@ -34,36 +37,48 @@ type ModelState = ConnectedProps<typeof connector>;
 
 type IProps = MaterialTopTabBarProps & ModelState;
 
-const TopTabBarWrapper: React.FC<IProps> = props => {
-  function renderLinearGradient() {
-    // const {linearColors = ['#ccc', '#1212'], gradientVisible} = props;
-    // //渐变色只有轮播图在可视区域内显示
-    // if (gradientVisible) {
-    //   return <LinearAnimatedGradient />;
-    // } else {
-    //   return null;
-    // }
+function RenderLinearGradient(colors: [string, string], visible: boolean) {
+  //渐变色只有轮播图在可视区域内显示
+  if (visible) {
+    return <LinearAnimatedGradient colors={colors} style={styles.gradient} />;
+  } else {
     return null;
   }
+}
 
+const TopTabBarWrapper: React.FC<IProps> = props => {
   function goCategory() {
     const {navigation} = props;
     navigation.navigate('Category');
   }
-  const {gradientVisible = false, ...restProps} = props;
+  const {gradientVisible, ...restProps} = props;
   let textStyle = styles.whiteText;
+
+  let activeTintColor = '#333';
   if (gradientVisible) {
     textStyle = styles.whiteText;
+    activeTintColor = '#fff';
   } else {
     textStyle = styles.text;
   }
   return (
     <View style={styles.container}>
-      {renderLinearGradient()}
+      {RenderLinearGradient(
+        props?.linearColors || ['#ccc', '#1212'],
+        gradientVisible,
+      )}
       <View style={styles.topTabBarView}>
         <MaterialTopTabBar {...restProps} />
         <Touchable style={styles.categoryBtn} onPress={() => goCategory()}>
           <Text style={textStyle}>分类</Text>
+        </Touchable>
+      </View>
+      <View style={styles.bottom}>
+        <Touchable style={styles.searchBtn}>
+          <Text style={textStyle}>搜索按钮</Text>
+        </Touchable>
+        <Touchable style={styles.historyBtn}>
+          <Text style={textStyle}>历史记录</Text>
         </Touchable>
       </View>
     </View>
@@ -97,7 +112,7 @@ const styles = StyleSheet.create({
   categoryBtn: {
     paddingHorizontal: 10,
     borderLeftWidth: StyleSheet.hairlineWidth,
-    borderLeftColor: '#eee',
+    borderLeftColor: '#ccc',
   },
   bottom: {
     flexDirection: 'row',
@@ -108,7 +123,7 @@ const styles = StyleSheet.create({
   searchBtn: {
     flex: 1,
     paddingLeft: 12,
-    height: 20,
+    height: 30,
     justifyContent: 'center',
     borderRadius: 15,
     backgroundColor: 'rgba(0,0,0,0.1)',
@@ -125,5 +140,8 @@ const styles = StyleSheet.create({
   },
   whiteText: {
     color: '#fff',
+  },
+  whiteBackgroundColor: {
+    backgroundColor: '#fff',
   },
 });

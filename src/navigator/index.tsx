@@ -1,17 +1,9 @@
 import {
-  CardStyleInterpolators,
   createStackNavigator,
-  HeaderStyleInterpolators,
   StackNavigationProp,
-  TransitionPreset,
 } from '@react-navigation/stack';
 import React from 'react';
-import {
-  NavigationContainer,
-  RouteProp,
-  NavigationState,
-} from '@react-navigation/native';
-import {Platform, StatusBar, StyleSheet} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
 import {navigationRef} from '@/utils/index';
 import BottomTabs from './BottomTabs';
 import Category from '@/pages/Category';

@@ -1,5 +1,4 @@
 import React from 'react';
-//@ts-ignore
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import {RootState} from '@/models/index';
 import {connect, ConnectedProps} from 'react-redux';

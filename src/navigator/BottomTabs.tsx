@@ -45,9 +45,11 @@ function getHeaderTitle(routeName: string) {
 const BottomTabs: React.FC<IProps> = props => {
   //动态设置头部标题
   function setHeaderTitle() {
-    const {navigation} = props;
-    const routeName = navigationRef.current?.getCurrentRoute()?.name ?? '';
-    if (routeName === 'Home') {
+    const {navigation, route} = props;
+    const routeName = route.state
+      ? route.state.routes[route.state.index].name
+      : route.params?.screen || 'HomeTabs';
+    if (routeName === 'HomeTabs') {
       navigation.setOptions({
         headerTransparent: true,
         headerTitle: '',

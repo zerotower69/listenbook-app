@@ -8,6 +8,11 @@ import {RootState} from '@/models/index';
 import {connect, ConnectedProps} from 'react-redux';
 import {StyleSheet} from 'react-native';
 import TopTabBarWrapper from '@/pages/views/TopTabBarWrapper';
+import CategoryItem from '@/pages/Category/CategoryItem';
+import {ICategory} from '@/models/category';
+import {createHomeModel} from '@/config/dva';
+
+const MemoHome = React.memo(Home);
 
 export type HomeParamList = {
   [Key: string]: {
@@ -17,11 +22,9 @@ export type HomeParamList = {
 const Tab = createMaterialTopTabNavigator<HomeParamList>();
 
 const mapStateToProps = (state: RootState) => {
-  const {home, category} = state;
-  // console.log(category);
+  const {category} = state;
   return {
-    gradientVisible: home.gradientVisible,
-    // myCategories: category.myCategories,
+    myCategories: category.myCategories,
   };
 };
 
@@ -36,6 +39,23 @@ export interface HomeTabsProps extends ModelState {
 const RenderBar: React.FC<MaterialTopTabBarProps> = props => {
   return <TopTabBarWrapper {...props} />;
 };
+
+const RenderScreen = (item: ICategory) => {
+  createHomeModel(item.id);
+  return (
+    <Tab.Screen
+      key={item.id}
+      name={item.id}
+      component={Home}
+      options={{
+        tabBarLabel: item.name,
+      }}
+      initialParams={{
+        namespace: item.id,
+      }}
+    />
+  );
+};
 const HomeTabs: React.FC<HomeTabsProps> = props => {
   return (
     <Tab.Navigator
@@ -45,6 +65,7 @@ const HomeTabs: React.FC<HomeTabsProps> = props => {
         tabBarScrollEnabled: true,
         tabBarItemStyle: {
           width: 80,
+          padding: 0,
         },
         tabBarIndicatorStyle: {
           height: 4,
@@ -56,25 +77,32 @@ const HomeTabs: React.FC<HomeTabsProps> = props => {
         tabBarStyle: {
           // 设置这里才能做到真正的透明
           backgroundColor: 'transparent',
+          width: 350,
         },
         tabBarActiveTintColor: '#f86442',
         tabBarInactiveTintColor: '#333',
         lazy: true,
       }}>
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          tabBarLabel: '推荐',
-        }}
-      />
+      {/*根据myCategories 动态生成组件*/}
+      {(props.myCategories || []).map(item => RenderScreen(item))}
+      {/*<Tab.Screen*/}
+      {/*  name="Home"*/}
+      {/*  component={Home}*/}
+      {/*  options={{*/}
+      {/*    tabBarLabel: '推荐',*/}
+      {/*  }}*/}
+      {/*/>*/}
     </Tab.Navigator>
   );
 };
 
 const styles = StyleSheet.create({
   sceneContainer: {
+    // 占据的屏幕样式
     backgroundColor: 'transparent',
+  },
+  tab: {
+    width: 300,
   },
 });
 

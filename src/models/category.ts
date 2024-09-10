@@ -77,14 +77,20 @@ const categoryModel: CategoryModel = {
     *toggle({payload}, {put, select}) {
       // @ts-ignore
       const category = yield select((state: RootState) => state.category);
-      const myCategories = payload?.myCategories ?? category.myCategories;
+      const myCategories = payload.myCategories || category.myCategories;
       yield put({
         type: 'setState',
         payload: {
-          isEdit: payload?.isEdit ?? !category.isEdit,
+          isEdit: payload.isEdit || !category.isEdit,
           myCategories: myCategories,
         },
       });
+      console.log(
+        'isEdit',
+        category.isEdit,
+        myCategories.length,
+        payload.myCategories,
+      );
       //如果是编辑状态，将选择的这些标签用本地存储存下来
       if (category.isEdit) {
         storage.save({

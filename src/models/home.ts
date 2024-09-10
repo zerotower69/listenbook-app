@@ -96,7 +96,7 @@ const homeModel: HomeModel = {
   },
   effects: {
     *fetchCarousels(_, {call, put}) {
-      console.log('request carousels');
+      // console.log('request carousels');
       // // @ts-ignore
       const {data} = yield call(http.get, CAROUSEL_URL);
       yield put({

@@ -1,8 +1,8 @@
-import {Animated, StyleSheet, Text, View} from 'react-native';
+import {Animated, StyleSheet, Text, View, Alert} from 'react-native';
 import {RootState} from '@/models/index';
 import {connect, ConnectedProps} from 'react-redux';
 import {RootStackNavigation} from '@/navigator/index';
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ICategory} from '@/models/category';
 import Touchable from '@/components/Touchable';
 import CategoryItem from '@/pages/Category/CategoryItem';
@@ -26,20 +26,25 @@ interface IProps extends ModelState {
   navigation: RootStackNavigation;
 }
 
+interface IState {
+  myCategories: ICategory[];
+}
+
 //确定不能移除的选项,推荐和VIP是固定的
 const fixedItems = [0, 1];
 
 const Category: React.FC<IProps> = props => {
   const {dispatch, isEdit} = props;
-  const [myCategories, setMyCategories] = useState(() => props.myCategories);
+  const [myCategories, setMyCategories] = useState([...props.myCategories]);
 
   //点击完成按钮后
   function onSubmit() {
+    console.log('submit', myCategories);
     dispatch({
       type: 'category/toggle',
       payload: {
         //将我选择的分类提交到dva进而再提交到本地存储中
-        myCategories: myCategories,
+        myCategories: [...myCategories],
       },
     });
   }
@@ -62,13 +67,14 @@ const Category: React.FC<IProps> = props => {
     }
     //编辑状态下才有效
     if (isEdit) {
+      // Alert.alert('message', `${selected}`);
       if (selected) {
         setMyCategories(
           myCategories.filter(selectedItem => selectedItem.id !== item.id),
         );
       } else {
         //不用push的原因是为了告诉react数据更新了
-        setMyCategories(myCategories.concat([item]));
+        setMyCategories([...myCategories, item]);
       }
     }
   }
@@ -160,6 +166,142 @@ const Category: React.FC<IProps> = props => {
   );
 };
 
+class Category2 extends React.Component<IProps, IState> {
+  state = {
+    myCategories: [...this.props.myCategories],
+  };
+
+  constructor(props: IProps) {
+    super(props);
+    props.navigation.setOptions({
+      headerRight: () => <HeaderRightButton onSubmit={this.onSubmit} />,
+    });
+  }
+
+  componentWillUnmount() {
+    //离开分类页面要推出编辑模式
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'category/toggle',
+      payload: {
+        isEdit: false,
+      },
+    });
+  }
+
+  onSubmit = () => {
+    const {dispatch} = this.props;
+    const {myCategories} = this.state;
+    dispatch({
+      type: 'category/toggle',
+      payload: {
+        //将我选择的分类提交到dva进而再提交到本地存储中
+        myCategories: myCategories,
+      },
+    });
+  };
+  onLongPress = () => {
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'category/toggle',
+      payload: {
+        isEdit: true,
+      },
+    });
+  };
+  onPress = (item: ICategory, index: number, selected: boolean) => {
+    const {isEdit} = this.props;
+    const {myCategories} = this.state;
+    const disabled = fixedItems.indexOf(index) > -1;
+    if (disabled) {
+      //禁用状态下无法删除
+      return;
+    }
+    //编辑状态下才有效
+    if (isEdit) {
+      if (selected) {
+        this.setState({
+          myCategories: myCategories.filter(
+            selectedItem => selectedItem.id !== item.id,
+          ),
+        });
+      } else {
+        this.setState({
+          //不用push的原因是为了告诉react数据更新了
+          myCategories: [...myCategories, item],
+        });
+      }
+    }
+  };
+  renderItem = (item: ICategory, index: number) => {
+    const {isEdit} = this.props;
+    const disabled = fixedItems.indexOf(index) > -1;
+    return (
+      <Touchable key={item.id} onPress={() => this.onPress(item, index, true)}>
+        <CategoryItem
+          data={item}
+          isEdit={isEdit}
+          selected
+          disabled={disabled}
+        />
+      </Touchable>
+    );
+  };
+  renderUnSelectedItem = (item: ICategory, index: number) => {
+    const {isEdit} = this.props;
+    return (
+      <Touchable
+        key={item.id}
+        onPress={() => this.onPress(item, index, false)}
+        onLongPress={this.onLongPress}>
+        <CategoryItem
+          data={item}
+          isEdit={isEdit}
+          selected={false}
+          disabled={false}
+        />
+      </Touchable>
+    );
+  };
+  render() {
+    const {categories = []} = this.props;
+    const {myCategories = []} = this.state;
+
+    const classifyGroup = _.groupBy(categories, item => item.classify);
+
+    return (
+      <ScrollView style={styles.container}>
+        <Text style={styles.classifyName}>我的分类</Text>
+        <View style={styles.classifyView}>
+          {myCategories.map(this.renderItem)}
+        </View>
+        <View>
+          {Object.keys(classifyGroup).map(classify => {
+            return (
+              <View key={classify}>
+                <Text style={styles.classifyName}>{classify}</Text>
+                <View style={styles.classifyView}>
+                  {/*只渲染不在我的组件里的*/}
+                  {classifyGroup[classify].map((item, index) => {
+                    if (
+                      myCategories.find(
+                        selectedItem => selectedItem.id === item.id,
+                      )
+                    ) {
+                      return null;
+                    }
+                    return this.renderUnSelectedItem(item, index);
+                  })}
+                </View>
+              </View>
+            );
+          })}
+        </View>
+      </ScrollView>
+    );
+  }
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -179,4 +321,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connector(Category);
+export default connector(Category2);
