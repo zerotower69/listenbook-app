@@ -426,6 +426,8 @@ PODS:
     - React-Core
   - RNCAsyncStorage (2.0.0):
     - React-Core
+  - RNExitApp (2.0.0):
+    - React-Core
   - RNGestureHandler (2.19.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -504,6 +506,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeExceptionHandler (from `../node_modules/react-native-exception-handler/ReactNativeExceptionHandler.podspec`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - RNExitApp (from `../node_modules/react-native-exit-app`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -604,6 +607,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native-exception-handler/ReactNativeExceptionHandler.podspec"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNExitApp:
+    :path: "../node_modules/react-native-exit-app"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNScreens:
@@ -665,6 +670,7 @@ SPEC CHECKSUMS:
   ReactCommon: 6b451ad57a7859920ee0ec84163d3c42d933abd6
   ReactNativeExceptionHandler: b11ff67c78802b2f62eed0e10e75cb1ef7947c60
   RNCAsyncStorage: d35c79ffba52c1013013e16b1fc295aec2feabb6
+  RNExitApp: 00036cabe7bacbb413d276d5520bf74ba39afa6a
   RNGestureHandler: 7ad14a6c7b491add489246611d324f10009083ac
   RNScreens: 80369e822c4f123c3f076c9ea4141991c17770f9
   RNSVG: 02afa5e73ab68c706208d0c64d25da80c6c75d0b

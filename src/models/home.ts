@@ -1,6 +1,6 @@
 import {Effect, Model} from 'dva-core-ts';
 import {Reducer} from 'redux';
-import axios from 'axios';
+import http from '@/config/http';
 import {RootState} from '@/models/index';
 
 //轮播图URL
@@ -96,60 +96,59 @@ const homeModel: HomeModel = {
   },
   effects: {
     *fetchCarousels(_, {call, put}) {
-      // console.log('request carousels');
+      console.log('request carousels');
       // // @ts-ignore
-      // const {data} = yield call(axios.get, CAROUSEL_URL);
-      // // console.log('轮播图', data);
-      // yield put({
-      //   type: 'setState',
-      //   payload: {
-      //     carousels: data,
-      //   },
-      // });
+      const {data} = yield call(http.get, CAROUSEL_URL);
+      yield put({
+        type: 'setState',
+        payload: {
+          carousels: data,
+        },
+      });
     },
     *fetchGuess(_, {call, put}) {
       console.log('request guess');
-      // const {data} = yield call(axios.get, GUESS_URL);
+      const {data} = yield call(http.get, GUESS_URL);
       // console.log('guess data', data);
-      // yield put({
-      //   type: 'setState',
-      //   payload: {
-      //     guess: data,
-      //   },
-      // });
+      yield put({
+        type: 'setState',
+        payload: {
+          guess: data,
+        },
+      });
     },
     *fetchChannels({callback, payload}, {call, put, select}) {
       console.log('request channels');
-      // const {channels, pagination} = yield select(
-      //   (state: RootState) => state.home,
-      // );
-      // let page = 1;
-      // if (payload && payload.loadMore) {
-      //   page = pagination.current + 1;
-      // }
-      // const {data} = yield call(axios.get, CHANNEL_URL, {
-      //   params: {
-      //     page: page,
-      //   },
-      // });
-      // let newChannels = data.results;
-      // if (payload && payload.loadMore) {
-      //   newChannels = channels.concat(newChannels);
-      // }
-      // yield put({
-      //   type: 'setState',
-      //   payload: {
-      //     channels: newChannels,
-      //     pagination: {
-      //       hasMore: newChannels.length < pagination.total,
-      //       total: data.pagination.total,
-      //       current: data.pagination.current,
-      //     },
-      //   },
-      // });
-      // if (typeof callback === 'function') {
-      //   callback();
-      // }
+      const {channels, pagination} = yield select(
+        (state: RootState) => state.home,
+      );
+      let page = 1;
+      if (payload && payload.loadMore) {
+        page = pagination.current + 1;
+      }
+      const {data} = yield call(http.get, CHANNEL_URL, {
+        params: {
+          page: page,
+        },
+      });
+      let newChannels = data.results;
+      if (payload && payload.loadMore) {
+        newChannels = channels.concat(newChannels);
+      }
+      yield put({
+        type: 'setState',
+        payload: {
+          channels: newChannels,
+          pagination: {
+            hasMore: newChannels.length < pagination.total,
+            total: data.pagination.total,
+            current: data.pagination.current,
+          },
+        },
+      });
+      if (typeof callback === 'function') {
+        callback();
+      }
     },
   },
 };

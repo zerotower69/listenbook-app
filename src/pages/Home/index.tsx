@@ -14,7 +14,6 @@ import {HomeParamList} from '@/navigator/HomeTabs';
 import {connect, ConnectedProps} from 'react-redux';
 import Carousel, {sideHeight} from '@/pages/Home/Carousel';
 import Guess from '@/pages/Home/Guess';
-import {getStyle} from 'react-native-svg/lib/typescript/xml';
 import ChannelItem from '@/pages/Home/ChannelItem';
 import {IChannel} from '@/models/home';
 
@@ -23,11 +22,12 @@ const mapStateToProps = (
   state: RootState,
   {route}: {route: RouteProp<HomeParamList>},
 ) => {
-  const {namespace} = route.params;
+  // const {namespace = 'home'} = route.params;
+  const namespace = 'home';
   const home = state[namespace];
   return {
     namespace,
-    loading: state.loading.effects['home/fetchChannels'],
+    loading: state.loading.effects[namespace + '/fetchChannels'],
     channels: home.channels,
     hasMore: home.pagination.hasMore,
     gradientVisible: home.gradientVisible,
@@ -91,28 +91,29 @@ const Home: React.FC<IProps> = props => {
   }
 
   function onRefresh() {
+    //1.设置刷新标识
     setRefreshing(true);
     //2.获取数据
-    // dispatch({
-    //   type: 'home/fetchChannels',
-    //   //延迟，待数据加载完毕再设置刷新标识
-    //   callback() {
-    //     setRefreshing(false);
-    //   },
-    // });
+    dispatch({
+      type: 'home/fetchChannels',
+      //延迟，待数据加载完毕再设置刷新标识
+      callback() {
+        setRefreshing(false);
+      },
+    });
   }
 
   function onEndReached() {
-    // const {loading, hasMore, namespace} = props;
-    // if (loading || !hasMore) {
-    //   return;
-    // }
-    // dispatch({
-    //   type: 'home/fetchChannels',
-    //   payload: {
-    //     loadMore: true,
-    //   },
-    // });
+    const {loading, hasMore, namespace} = props;
+    if (loading || !hasMore) {
+      return;
+    }
+    dispatch({
+      type: 'home/fetchChannels',
+      payload: {
+        loadMore: true,
+      },
+    });
   }
 
   function onScroll({nativeEvent}: NativeSyntheticEvent<NativeScrollEvent>) {
@@ -122,27 +123,26 @@ const Home: React.FC<IProps> = props => {
     const {gradientVisible, namespace} = props;
     if (newGradientVisible !== gradientVisible) {
       //防止多次提交重复的action
-      // dispatch({
-      //   type: 'home/setState',
-      //   payload: {
-      //     gradientVisible: newGradientVisible,
-      //   },
-      // });
+      dispatch({
+        type: 'home/setState',
+        payload: {
+          gradientVisible: newGradientVisible,
+        },
+      });
     }
   }
 
   useEffect(() => {
     //请求频道列表
-    // dispatch({
-    //   type: 'home/fetchChannels',
-    // });
+    dispatch({
+      type: 'home/fetchChannels',
+    });
     //请求轮播图
-    // dispatch({
-    //   type: 'home/fetchCarousels',
-    // });
+    dispatch({
+      type: 'home/fetchCarousels',
+    });
   }, []);
 
-  console.log('namespace', namespace);
   return (
     // <FlatList
     //   data={channels}
@@ -158,7 +158,7 @@ const Home: React.FC<IProps> = props => {
     //   onScroll={onScroll}
     // />
     <View>
-      <Text>aaa</Text>
+      <Text>Ho9mekjhhhh</Text>
     </View>
   );
 };

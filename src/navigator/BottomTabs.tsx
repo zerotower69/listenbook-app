@@ -84,6 +84,7 @@ const BottomTabs: React.FC<IProps> = props => {
         name="Listen"
         component={Listen}
         options={{
+          tabBarLabel: '我听',
           headerShown: false,
           tabBarIcon: ({color, size}) => (
             <Icon name="shoucang" color={color} size={size} />
@@ -94,6 +95,7 @@ const BottomTabs: React.FC<IProps> = props => {
         name="Found"
         component={Found}
         options={{
+          tabBarLabel: '发现',
           headerShown: false,
           tabBarIcon: ({color, size}) => (
             <Icon name="faxian" color={color} size={size} />
@@ -104,6 +106,7 @@ const BottomTabs: React.FC<IProps> = props => {
         name="Account"
         component={Account}
         options={{
+          tabBarLabel: '我的',
           headerShown: false,
           tabBarIcon: ({color, size}) => (
             <Icon name="user" color={color} size={size} />
