@@ -8,6 +8,7 @@ import {connect, ConnectedProps} from 'react-redux';
 import {RouteProp} from '@react-navigation/native';
 import {RootStackNavigation, RootStackParamList} from '@/navigator/index';
 import {IAuthor} from '@/models/album';
+import Tab from './Tab';
 
 import coverRight from '@/assets/cover-right.png';
 
@@ -34,7 +35,8 @@ const RenderHeader = (
   route: IProps['route'],
 ) => {
   const {image, title} = route.params.item;
-  console.log('image', image, author.avatar);
+  // console.log('image', image, author.avatar);
+  //TODO:频道页面头像图片似乎有问题
   const avatarUrl = 'http://dummyimage.com/32x32/f1f279/d079f2.png&text=汤敏';
   return (
     <View
@@ -84,7 +86,12 @@ const Album: React.FC<IProps> = props => {
       headerBackTitle: '返回',
     });
   }, []);
-  return <View>{RenderHeader(headerHeight, summary, author, route)}</View>;
+  return (
+    <View style={styles.container}>
+      {RenderHeader(headerHeight, summary, author, route)}
+      <Tab />
+    </View>
+  );
 };
 
 // function Wrapper(){
@@ -93,6 +100,9 @@ const Album: React.FC<IProps> = props => {
 // }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   header: {
     height: 260,
     flexDirection: 'row',
