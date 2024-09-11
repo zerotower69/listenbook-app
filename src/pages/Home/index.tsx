@@ -15,7 +15,8 @@ import {connect, ConnectedProps} from 'react-redux';
 import Carousel, {sideHeight} from '@/pages/Home/Carousel';
 import Guess from '@/pages/Home/Guess';
 import ChannelItem from '@/pages/Home/ChannelItem';
-import {ICarousel, IChannel} from '@/models/home';
+import {IChannel, IGuess} from '@/models/home';
+import {RootStackNavigation} from '@/navigator/index';
 
 const MemoGuess = React.memo(Guess);
 
@@ -39,12 +40,16 @@ const connector = connect(mapStateToProps);
 
 type ModelState = ConnectedProps<typeof connector>;
 
-interface IProps extends ModelState {}
+interface IProps extends ModelState {
+  navigation: RootStackNavigation;
+}
 interface IState {}
 
 function keyExtractor(item: IChannel) {
   return item.id;
 }
+
+//@ts-ignore
 const Home: React.FC<IProps> = props => {
   const {dispatch, namespace, channels} = props;
   const [refreshing, setRefreshing] = useState(false);
@@ -59,7 +64,7 @@ const Home: React.FC<IProps> = props => {
       <View>
         <Carousel namespace={namespace} />
         <View style={styles.background}>
-          <MemoGuess namespace={namespace} />
+          <MemoGuess namespace={namespace} goAlbum={onPress} />
         </View>
       </View>
     );
@@ -175,10 +180,15 @@ class Home2 extends React.Component<IProps, IState> {
   state = {
     refreshing: false,
   };
-  onPress = () => {};
+  goAlbum = (data: IChannel | IGuess) => {
+    const {navigation} = this.props;
+    navigation.navigate('Album', {
+      item: data,
+    });
+  };
 
   renderItem = ({item}: ListRenderItemInfo<IChannel>) => {
-    return <ChannelItem data={item} onPress={this.onPress} />;
+    return <ChannelItem data={item} onPress={this.goAlbum} />;
   };
 
   renderHeader = () => {
@@ -187,7 +197,7 @@ class Home2 extends React.Component<IProps, IState> {
       <View>
         <Carousel namespace={namespace} />
         <View style={styles.background}>
-          <MemoGuess namespace={namespace} />
+          <MemoGuess namespace={namespace} goAlbum={this.goAlbum} />
         </View>
       </View>
     );

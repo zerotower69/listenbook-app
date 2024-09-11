@@ -19,9 +19,9 @@ const STATUSBAR_HEIGHT = StatusBar.currentHeight;
 const mapStateToProps = (state: RootState, props: MaterialTopTabBarProps) => {
   const routeName = getActionRouteName(props.state);
   const modelState = state[routeName];
-  console.log(
-    modelState.carousels[modelState.activeCarouselIndex]?.colors ?? [],
-  );
+  // console.log(
+  //   modelState.carousels[modelState.activeCarouselIndex]?.colors ?? [],
+  // );
   return {
     activeIndex: modelState.activeCarouselIndex,
     linearColors: modelState.carousels

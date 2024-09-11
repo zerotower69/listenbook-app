@@ -54,17 +54,10 @@ const errorHandler = (e: Error, isFatal: boolean) => {
 // });
 
 class App extends React.Component {
-  causeJSError = () => {
-    // throw new Error('THIS IS A CUSTOM UNHANDLED JS ERROR');
-  };
-
-  causeNativeError = () => {
-    // RnTestExceptionHandler.raiseTestNativeError();
-    console.log('native error');
-  };
   render() {
-    // const isHermes = () => !!global.HermesInternal;
-    // console.log('isHermes', isHermes());
+    //@ts-ignore 检查hermes是否已经存在
+    const isHermes = () => !!global.HermesInternal;
+    console.log('isHermes', isHermes());
     return (
       <Provider store={store}>
         <SafeAreaView style={styles.background}>

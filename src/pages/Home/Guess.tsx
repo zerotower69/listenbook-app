@@ -3,7 +3,7 @@ import {RootState} from '@/models/index';
 import React, {useEffect} from 'react';
 import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
 import Icon from '@/components/iconfont/Icon';
-import {IGuess} from '@/models/home';
+import {IChannel, IGuess} from '@/models/home';
 import Touchable from '@/components/Touchable';
 import {RouteProp} from '@react-navigation/native';
 import {HomeParamList} from '@/navigator/HomeTabs';
@@ -27,10 +27,11 @@ type ModelState = ConnectedProps<typeof connector>;
 
 interface IProps extends ModelState {
   namespace: string;
+  goAlbum: (data: IChannel | IGuess) => void;
 }
 
 const Guess: React.FC<IProps> = props => {
-  const {dispatch, namespace, guess} = props;
+  const {dispatch, namespace, guess, goAlbum} = props;
   //获取数据
   function fetchData() {
     dispatch({
@@ -40,7 +41,11 @@ const Guess: React.FC<IProps> = props => {
 
   function renderItem({item}: {item: IGuess}) {
     return (
-      <Touchable style={styles.item} onPress={() => {}}>
+      <Touchable
+        style={styles.item}
+        onPress={() => {
+          goAlbum(item);
+        }}>
         <Image source={{uri: item.image}} style={styles.image} />
         <Text numberOfLines={2}>{item.title}</Text>
       </Touchable>
