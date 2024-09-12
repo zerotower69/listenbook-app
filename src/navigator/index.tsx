@@ -1,5 +1,7 @@
 import {
+  CardStyleInterpolators,
   createStackNavigator,
+  HeaderStyleInterpolators,
   StackNavigationOptions,
   StackNavigationProp,
 } from '@react-navigation/stack';
@@ -9,22 +11,20 @@ import {navigationRef} from '@/utils/index';
 import BottomTabs from './BottomTabs';
 import Category from '@/pages/Category';
 import Album from '@/pages/Album';
-import {Animated, StyleSheet} from 'react-native';
+import {Animated, Platform, StatusBar, StyleSheet} from 'react-native';
 
 export type RootStackParamList = {
   BottomTabs: {
     screen?: string;
   };
   Category: undefined;
-  Listen: undefined;
-  Found: undefined;
-  Account: undefined;
   Album: {
     item: {
       id: string;
       title: string;
       image: string;
     };
+    opacity?: Animated.Value;
   };
 };
 
@@ -42,17 +42,46 @@ function getAlbumOptions({
     headerTransparent: true,
     //设置头部标题的样式
     headerTitleStyle: {
-      opacity: 0,
+      opacity: route.params.opacity,
     },
     headerBackground: () => {
-      return <Animated.View style={styles.headerBackground} />;
+      return (
+        <Animated.View
+          style={[styles.headerBackground, {opacity: route.params.opacity}]}
+        />
+      );
     },
   };
 }
 const Navigator: React.FC = () => {
   return (
     <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={
+          {
+            // headerMode: 'float',
+            // headerTitleAlign: 'center',
+            // headerStyleInterpolator: HeaderStyleInterpolators.forUIKit,
+            // cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            // gestureEnabled: true,
+            // gestureDirection: 'horizontal',
+            // ...Platform.select({
+            //   android: {
+            //     headerStatusBarHeight: StatusBar.currentHeight,
+            //   },
+            // }),
+            // headerBackTitleVisible: false,
+            // headerTintColor: '#333',
+            // headerStyle: {
+            //   ...Platform.select({
+            //     android: {
+            //       elevation: 0,
+            //       borderBottomWidth: StyleSheet.hairlineWidth,
+            //     },
+            //   }),
+            // },
+          }
+        }>
         <Stack.Screen
           name="BottomTabs"
           component={BottomTabs}

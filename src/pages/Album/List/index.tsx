@@ -1,15 +1,10 @@
 import React, {useCallback} from 'react';
-import {
-  FlatList,
-  ListRenderItemInfo,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {ListRenderItemInfo, StyleSheet} from 'react-native';
 import {RootState} from '@/models/index';
 import {connect, ConnectedProps} from 'react-redux';
 import {IProgram} from '@/models/album';
 import Item from '@/pages/Album/List/Item';
+import {FlatList} from 'react-native-gesture-handler';
 
 const mapStateToProps = ({album}: RootState) => {
   return {

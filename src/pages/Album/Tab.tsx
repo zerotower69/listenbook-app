@@ -113,6 +113,7 @@ class Tab2 extends React.Component<IProps> {
         renderScene={this.renderScene}
         sceneContainerStyle={{
           backgroundColor: '#fff',
+          flex: 1,
         }}
       />
     );
