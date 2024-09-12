@@ -14,8 +14,12 @@ import {useHeaderHeight} from '@react-navigation/elements';
 import {RootState} from '@/models/index';
 import {connect, ConnectedProps} from 'react-redux';
 import {RouteProp} from '@react-navigation/native';
-import {RootStackNavigation, RootStackParamList} from '@/navigator/index';
-import {IAuthor} from '@/models/album';
+import {
+  ModalStackNavigation,
+  RootStackNavigation,
+  RootStackParamList,
+} from '@/navigator/index';
+import {IAuthor, IProgram} from '@/models/album';
 import Tab from './Tab';
 import coverRight from '@/assets/cover-right.png';
 import {
@@ -46,7 +50,8 @@ type ModelState = ConnectedProps<typeof connector>;
 
 interface IProps extends ModelState {
   route: RouteProp<RootStackParamList, 'Album'>;
-  navigation: RootStackNavigation;
+  // navigation: RootStackNavigation;
+  navigation: ModalStackNavigation;
   headerHeight: number;
 }
 
@@ -92,7 +97,7 @@ const RenderHeader = (
 };
 
 const Album: React.FC<IProps> = props => {
-  const {dispatch, route, navigation, summary, author} = props;
+  const {dispatch, summary, author, route} = props;
   //获取标题栏的高度
   const headerHeight = useHeaderHeight();
   const RANGE = [-(HEADER_HEIGHT - headerHeight), 0];
@@ -116,6 +121,13 @@ const Album: React.FC<IProps> = props => {
     Animated.add(translationY2, reverseLastScrollY),
     translationYOffset,
   );
+
+  const onItemPress = (data: IProgram, index: number) => {
+    const {navigation} = props;
+    navigation.navigate('Detail', {
+      id: data.id,
+    });
+  };
   const onScrollDrag = Animated.event(
     [{nativeEvent: {contentOffset: {y: lastScrollY}}}],
     {
@@ -175,6 +187,7 @@ const Album: React.FC<IProps> = props => {
   };
   //componentWillMount
   useEffect(() => {
+    const {navigation} = props;
     const {id} = route.params.item;
     dispatch({
       type: 'album/fetchAlbum',
@@ -193,6 +206,7 @@ const Album: React.FC<IProps> = props => {
         }),
       },
     });
+    //!:这样传opacity 序列化错误
     // navigation.setParams({
     //   opacity: translateY.interpolate({
     //     inputRange: RANGE,
@@ -236,6 +250,7 @@ const Album: React.FC<IProps> = props => {
                 tapRef={tapRef}
                 nativeRef={nativeRef}
                 onScrollDrag={onScrollDrag}
+                onItemPress={onItemPress}
               />
             </View>
           </Animated.View>

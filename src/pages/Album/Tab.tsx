@@ -13,6 +13,7 @@ import {
   PanGestureHandler,
   TapGestureHandler,
 } from 'react-native-gesture-handler';
+import {IProgram} from '@/models/album';
 
 interface IRoute {
   key: string;
@@ -29,6 +30,7 @@ export interface ITabProps {
   tapRef: React.RefObject<TapGestureHandler | undefined>;
   nativeRef: React.RefObject<NativeViewGestureHandler | undefined>;
   onScrollDrag: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  onItemPress: (data: IProgram, index: number) => void;
 }
 
 const Tab: React.FC<ITabProps> = props => {
@@ -38,7 +40,7 @@ const Tab: React.FC<ITabProps> = props => {
   }
 
   function renderScene({route}: {route: IRoute}) {
-    const {panRef, tapRef, nativeRef, onScrollDrag} = props;
+    const {panRef, tapRef, nativeRef, onScrollDrag, onItemPress} = props;
     // console.log('onScrollDrag', typeof onScrollDrag, onScrollDrag);
     switch (route.key) {
       case 'introduction':
@@ -50,14 +52,17 @@ const Tab: React.FC<ITabProps> = props => {
             tapRef={tapRef}
             nativeRef={nativeRef}
             onScrollDrag={onScrollDrag}
+            onItemPress={onItemPress}
           />
         );
     }
   }
-  function renderTabBar(props: SceneRendererProps & {navigationState: IState}) {
+  function renderTabBar(
+    _props: SceneRendererProps & {navigationState: IState},
+  ) {
     return (
       <TabBar
-        {...props}
+        {..._props}
         scrollEnabled
         tabStyle={styles.tabStyle}
         labelStyle={styles.labelStyle}

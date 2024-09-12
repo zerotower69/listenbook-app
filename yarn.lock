@@ -7830,10 +7830,10 @@ __metadata:
     react-native-screens: ^3.34.0
     react-native-scrollable-tab-view: ^1.0.0
     react-native-snap-carousel: ^4.0.0-beta.6
+    react-native-sound: 0.11.1
     react-native-storage: ^1.0.1
     react-native-svg: 9.13.0
     react-native-tab-view: ^3.5.2
-    react-native-tab-view-viewpager-adapter: ^1.1.0
     react-navigation-header-buttons: ^10.0.0
     react-redux: ^9.1.2
     react-test-renderer: 18.2.0
@@ -9947,6 +9947,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-sound@npm:0.11.1":
+  version: 0.11.1
+  resolution: "react-native-sound@npm:0.11.1"
+  peerDependencies:
+    react-native: ">=0.8.0"
+  checksum: b67373ae46b745309807568283030ae271471e8d6c123600695e8974a51ede1bc317f60bb0612bcfa4d38f72747632a9acefc28cc5531eac7a0b48b53b40db4e
+  languageName: node
+  linkType: hard
+
 "react-native-storage@npm:^1.0.1":
   version: 1.0.1
   resolution: "react-native-storage@npm:1.0.1"
@@ -9966,20 +9975,6 @@ __metadata:
     react: "*"
     react-native: ">=0.50.0"
   checksum: 1ec87a9e577666eb4ce08d8875c2e0ad53cc0ecf16c96f8a9214fd6a318028ea0037e7b618feb648bae8d5a363a03cbb5bcea9abf59acb273ef46aa92dd8ff4f
-  languageName: node
-  linkType: hard
-
-"react-native-tab-view-viewpager-adapter@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "react-native-tab-view-viewpager-adapter@npm:1.1.0"
-  peerDependencies:
-    "@react-native-community/viewpager": "*"
-    react: "*"
-    react-native: "*"
-    react-native-gesture-handler: "*"
-    react-native-reanimated: "*"
-    react-native-tab-view: "*"
-  checksum: 0740571783ff8420a23ca244bf8cf6c45221465c770f43b8d6452d25d7b05445f8c91258bcb609930a7dae57fb03816038c93f13ca560a1ed9f209c703dc28d0
   languageName: node
   linkType: hard
 

@@ -7,7 +7,7 @@ import Icon from '@/components/iconfont/Icon';
 interface IProps {
   data: IProgram;
   index: number;
-  onPress: (data: IProgram) => void;
+  onPress: (data: IProgram, index: number) => void;
 }
 
 const Item: React.FC<IProps> = props => {
@@ -15,7 +15,7 @@ const Item: React.FC<IProps> = props => {
   const onItemPress = useCallback(() => {
     const {onPress} = props;
     if (typeof onPress === 'function') {
-      onPress(data);
+      onPress(data, index);
     }
   }, []);
   return (

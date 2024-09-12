@@ -31,12 +31,14 @@ type IProps = ModelState & ITabProps;
 const List: React.FC<IProps> = props => {
   const {list, panRef, nativeRef, onScrollDrag} = props;
 
-  const onItemPress = useCallback((data: IProgram) => {}, []);
+  const onPress = useCallback((data: IProgram, index: number) => {
+    const {onItemPress} = props;
+    onItemPress(data, index);
+  }, []);
   const renderItem = ({item, index}: ListRenderItemInfo<IProgram>) => {
-    return <Item data={item} index={index} onPress={onItemPress} />;
+    return <Item data={item} index={index} onPress={onPress} />;
   };
   const keyExtractor = (item: IProgram) => item.id;
-  console.log('onScrollTag--', onScrollDrag);
   return (
     // 通过这个组件可以拦截FlatList自带的滚动效果
     <NativeViewGestureHandler simultaneousHandlers={panRef} ref={nativeRef}>

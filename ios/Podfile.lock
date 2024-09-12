@@ -440,6 +440,11 @@ PODS:
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-RCTImage
+  - RNSound (0.11.1):
+    - React-Core
+    - RNSound/Core (= 0.11.1)
+  - RNSound/Core (0.11.1):
+    - React-Core
   - RNSVG (9.13.0):
     - React
   - SocketRocket (0.6.1)
@@ -516,6 +521,7 @@ DEPENDENCIES:
   - RNExitApp (from `../node_modules/react-native-exit-app`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSound (from `../node_modules/react-native-sound`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -624,6 +630,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSound:
+    :path: "../node_modules/react-native-sound"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -686,6 +694,7 @@ SPEC CHECKSUMS:
   RNExitApp: 00036cabe7bacbb413d276d5520bf74ba39afa6a
   RNGestureHandler: 7ad14a6c7b491add489246611d324f10009083ac
   RNScreens: 80369e822c4f123c3f076c9ea4141991c17770f9
+  RNSound: 27e8268bdb0a1f191f219a33267f7e0445e8d62f
   RNSVG: 02afa5e73ab68c706208d0c64d25da80c6c75d0b
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: e407d2e8cc6cf5170a1dddf459f9fc612f85fcac
