@@ -24,7 +24,7 @@ export type RootStackParamList = {
       title: string;
       image: string;
     };
-    opacity?: Animated.Value;
+    opacity?: Animated.AnimatedInterpolation<string | number>;
   };
 };
 

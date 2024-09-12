@@ -1,8 +1,18 @@
 import React, {useState} from 'react';
-import {Platform, StyleSheet} from 'react-native';
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Platform,
+  StyleSheet,
+} from 'react-native';
 import {TabView, TabBar, SceneRendererProps} from 'react-native-tab-view';
 import Introduction from './Introduction';
 import AlbumList from './List';
+import {
+  NativeViewGestureHandler,
+  PanGestureHandler,
+  TapGestureHandler,
+} from 'react-native-gesture-handler';
 
 interface IRoute {
   key: string;
@@ -14,20 +24,34 @@ interface IState {
   index: number;
 }
 
-interface IProps {}
+export interface ITabProps {
+  panRef: React.RefObject<PanGestureHandler | undefined>;
+  tapRef: React.RefObject<TapGestureHandler | undefined>;
+  nativeRef: React.RefObject<NativeViewGestureHandler | undefined>;
+  onScrollDrag: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+}
 
-const Tab: React.FC<IProps> = props => {
+const Tab: React.FC<ITabProps> = props => {
   const [tabIndex, setTabIndex] = useState(1);
   function onTabIndexChange(index: number) {
     setTabIndex(index);
   }
 
   function renderScene({route}: {route: IRoute}) {
+    const {panRef, tapRef, nativeRef, onScrollDrag} = props;
+    // console.log('onScrollDrag', typeof onScrollDrag, onScrollDrag);
     switch (route.key) {
       case 'introduction':
         return <Introduction />;
       case 'albums':
-        return <AlbumList />;
+        return (
+          <AlbumList
+            panRef={panRef}
+            tapRef={tapRef}
+            nativeRef={nativeRef}
+            onScrollDrag={onScrollDrag}
+          />
+        );
     }
   }
   function renderTabBar(props: SceneRendererProps & {navigationState: IState}) {
@@ -60,65 +84,6 @@ const Tab: React.FC<IProps> = props => {
     />
   );
 };
-
-class Tab2 extends React.Component<IProps> {
-  state = {
-    tabIndex: 1,
-  };
-  onIndexChange = (index: number) => {
-    this.setState({
-      tabIndex: index,
-    });
-  };
-
-  renderScene = ({route}: {route: IRoute}) => {
-    switch (route.key) {
-      case 'introduction':
-        return <Introduction />;
-      case 'albums':
-        return <AlbumList />;
-    }
-  };
-  renderTabBar = (props: SceneRendererProps & {navigationState: IState}) => {
-    return (
-      <TabBar
-        {...props}
-        scrollEnabled
-        tabStyle={styles.tabStyle}
-        labelStyle={styles.labelStyle}
-        style={styles.tabBarStyle}
-        contentContainerStyle={styles.tabBarContainer}
-        indicatorStyle={styles.indicatorStyle}
-        indicatorContainerStyle={styles.indicatorContainer}
-        android_ripple={{
-          radius: 0,
-          borderless: true,
-          color: 'transparent',
-        }}
-      />
-    );
-  };
-  render() {
-    return (
-      <TabView
-        onIndexChange={this.onIndexChange}
-        navigationState={{
-          routes: [
-            {key: 'introduction', title: '简介'},
-            {key: 'albums', title: '节目'},
-          ],
-          index: this.state.tabIndex,
-        }}
-        renderTabBar={this.renderTabBar}
-        renderScene={this.renderScene}
-        sceneContainerStyle={{
-          backgroundColor: '#fff',
-          flex: 1,
-        }}
-      />
-    );
-  }
-}
 
 const styles = StyleSheet.create({
   tabStyle: {

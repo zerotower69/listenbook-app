@@ -1,5 +1,13 @@
 import React, {useEffect, useRef} from 'react';
-import {View, Image, StyleSheet, Text, Animated} from 'react-native';
+import {
+  View,
+  Image,
+  StyleSheet,
+  Text,
+  Animated,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from 'react-native';
 import {BlurView} from '@react-native-community/blur';
 //v6
 import {useHeaderHeight} from '@react-navigation/elements';
@@ -9,16 +17,21 @@ import {RouteProp} from '@react-navigation/native';
 import {RootStackNavigation, RootStackParamList} from '@/navigator/index';
 import {IAuthor} from '@/models/album';
 import Tab from './Tab';
-
 import coverRight from '@/assets/cover-right.png';
 import {
   GestureEvent,
+  NativeViewGestureHandler,
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
   PanGestureHandlerStateChangeEvent,
   State,
+  TapGestureHandler,
 } from 'react-native-gesture-handler';
 import {viewportHeight} from '@/utils/index';
+
+const HEADER_HEIGHT = 260;
+
+const USE_NATIVE_DRIVER = true;
 
 const mapStateToProps = ({album}: RootState) => {
   return {
@@ -82,24 +95,40 @@ const Album: React.FC<IProps> = props => {
   const {dispatch, route, navigation, summary, author} = props;
   //获取标题栏的高度
   const headerHeight = useHeaderHeight();
-
-  const HEADER_HEIGHT = 260;
-
   const RANGE = [-(HEADER_HEIGHT - headerHeight), 0];
 
-  let translationYValue = 0;
+  const panRef = useRef<PanGestureHandler>();
+  const tapRef = useRef<TapGestureHandler>();
+  const nativeRef = useRef<NativeViewGestureHandler>();
+
+  let translationYValue = useRef(0).current;
   //偏移值
-  const translationYOffset = new Animated.Value(0);
-  const translationY2 = new Animated.Value(0);
-  // const onGestureEvent=(e: PanGestureHandlerGestureEvent) =>{
-  //   //e.nativeEvent.translationY 手指拖动的距离
-  //   console.log(e.nativeEvent.translationY);
-  // }
-  const translateY = Animated.add(translationY2, translationYOffset);
+  const translationYOffset = useRef(new Animated.Value(0)).current;
+  const translationY2 = useRef(new Animated.Value(0)).current;
+  const lastScrollY = useRef(new Animated.Value(0)).current;
+  const reverseLastScrollY = Animated.multiply(
+    new Animated.Value(-1),
+    lastScrollY,
+  );
+  let lastScrollYValue = useRef(0).current;
+
+  const translateY = Animated.add(
+    Animated.add(translationY2, reverseLastScrollY),
+    translationYOffset,
+  );
+  const onScrollDrag = Animated.event(
+    [{nativeEvent: {contentOffset: {y: lastScrollY}}}],
+    {
+      useNativeDriver: USE_NATIVE_DRIVER,
+      // listener: ({nativeEvent}: NativeSyntheticEvent<NativeScrollEvent>) => {
+      //   lastScrollYValue = nativeEvent.contentOffset.y;
+      // },
+    },
+  );
   const onGestureEvent = Animated.event(
     [{nativeEvent: {translationY: translationY2}}],
     {
-      useNativeDriver: true, //TODO:启动原生动画的驱动
+      useNativeDriver: USE_NATIVE_DRIVER, //TODO:启动原生动画的驱动
     },
   );
   const onHandlerStateChange = ({
@@ -109,6 +138,7 @@ const Album: React.FC<IProps> = props => {
     if (nativeEvent.oldState === State.ACTIVE) {
       //Y轴方向下的累计手势位移
       let {translationY} = nativeEvent;
+      translationY -= lastScrollYValue;
       //Animated.Value : value + offset
       translationYOffset.extractOffset(); //设置offset属性，清空value值
       translationYOffset.setValue(translationY);
@@ -116,6 +146,7 @@ const Album: React.FC<IProps> = props => {
       translationYOffset.flattenOffset();
       translationY2.setValue(0);
       translationYValue += translationY;
+      let maxDeltaY = -RANGE[0] - translationYValue;
       if (translationYValue < RANGE[0]) {
         translationYValue = RANGE[0];
         Animated.timing(translationYOffset, {
@@ -123,6 +154,7 @@ const Album: React.FC<IProps> = props => {
           duration: 1000,
           useNativeDriver: true,
         }).start();
+        maxDeltaY = RANGE[1];
       } else if (translationYValue > RANGE[1]) {
         //手指向上拖动超过时
         translationYValue = RANGE[1];
@@ -131,6 +163,13 @@ const Album: React.FC<IProps> = props => {
           duration: 1000,
           useNativeDriver: true,
         }).start();
+        maxDeltaY = -RANGE[0];
+      }
+      if (tapRef.current) {
+        const tap: any = tapRef.current;
+        tap.setNativeProps({
+          maxDeltaY,
+        });
       }
     }
   };
@@ -146,43 +185,63 @@ const Album: React.FC<IProps> = props => {
     navigation.setOptions({
       headerBackTitle: '返回',
     });
-    // Animated.timing(translateY as Animated.Value, {
-    //   toValue: 0,
-    //   duration: 3 * 1000,
-    //   useNativeDriver: false,
-    // }).start(() => {});
-    // console.log('props', props.headerHeight);
+    navigation.setOptions({
+      headerTitleStyle: {
+        opacity: translateY.interpolate({
+          inputRange: RANGE,
+          outputRange: [1, 0],
+        }),
+      },
+    });
+    // navigation.setParams({
+    //   opacity: translateY.interpolate({
+    //     inputRange: RANGE,
+    //     outputRange: [1, 0],
+    //   }),
+    // });
+    // console.log('index onGestureEvent', typeof onGestureEvent, onGestureEvent);
   }, []);
   return (
     // <View style={styles.container}>
     //   {RenderHeader(headerHeight, summary, author, route)}
     //   <Tab />
     // </View>
-    <PanGestureHandler
-      onGestureEvent={onGestureEvent}
-      onHandlerStateChange={onHandlerStateChange}>
-      <Animated.View
-        style={[
-          styles.container,
-          {
-            transform: [
+    <TapGestureHandler ref={tapRef} maxDeltaY={-RANGE[0]}>
+      <View style={styles.rootContainer}>
+        <PanGestureHandler
+          ref={panRef}
+          onGestureEvent={onGestureEvent}
+          simultaneousHandlers={[tapRef, nativeRef]}
+          onHandlerStateChange={onHandlerStateChange}>
+          <Animated.View
+            style={[
+              styles.container,
               {
-                translateY: translateY.interpolate({
-                  inputRange: RANGE,
-                  outputRange: RANGE,
-                  //如果translateY的值超过了范围就不处理
-                  extrapolate: 'clamp',
-                }),
+                transform: [
+                  {
+                    translateY: translateY.interpolate({
+                      inputRange: RANGE,
+                      outputRange: RANGE,
+                      //如果translateY的值超过了范围就不处理
+                      extrapolate: 'clamp',
+                    }),
+                  },
+                ],
               },
-            ],
-          },
-        ]}>
-        {RenderHeader(headerHeight, summary, author, route)}
-        <View style={{height: viewportHeight - headerHeight}}>
-          <Tab />
-        </View>
-      </Animated.View>
-    </PanGestureHandler>
+            ]}>
+            {RenderHeader(headerHeight, summary, author, route)}
+            <View style={{height: viewportHeight - headerHeight}}>
+              <Tab
+                panRef={panRef}
+                tapRef={tapRef}
+                nativeRef={nativeRef}
+                onScrollDrag={onScrollDrag}
+              />
+            </View>
+          </Animated.View>
+        </PanGestureHandler>
+      </View>
+    </TapGestureHandler>
   );
 };
 
@@ -192,11 +251,14 @@ const Album: React.FC<IProps> = props => {
 // }
 
 const styles = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+  },
   container: {
     flex: 1,
   },
   header: {
-    height: 260,
+    height: HEADER_HEIGHT,
     flexDirection: 'row',
     paddingHorizontal: 20,
     // backgroundColor: 'red',
